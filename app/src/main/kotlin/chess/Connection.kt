@@ -36,17 +36,4 @@ class Connection {
             return error.toString()
         }
     }
-    fun connectToGUI(pathToEngine: String, nameOfEngine: String, authorOfEngine: String) {
-        try {
-            sendOutput(nameOfEngine + "\n", false)
-            output.write(authorOfEngine + "\n")
-            output.write("uciok\n")
-            output.write("readyok\n")
-        }
-        catch(error: Error) {
-            print("connection failed")
-            throw(error)
-        }
-    }
-
 }

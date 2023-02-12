@@ -4,7 +4,7 @@ import java.io.DataOutputStream
 import java.io.InputStreamReader
 import java.net.URL
 class Cloud {
-    fun sendData(urlToCloudInstance: String, dataToSend: String): Boolean {
+    fun sendData(dataToSend: String, urlToCloudInstance: String = ""): Boolean {
         val url = URL(urlToCloudInstance)
         val connection = url.openConnection()
         connection.doOutput = true
@@ -24,7 +24,7 @@ class Cloud {
             return false
         }
     }
-    fun returnData(urlToLocalConnection: String, dataToSend: String): Boolean {
+    fun returnData( dataToSend: String, urlToLocalConnection: String = ""): Boolean {
         val url = URL(urlToLocalConnection)
         val connection = url.openConnection()
         connection.doOutput = true
