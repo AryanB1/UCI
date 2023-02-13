@@ -185,6 +185,9 @@ class UCI(private val socket: Socket, hash: Double, nalimovPath: String, nalimov
     fun sendInfo() {
 
     }
+    fun retrieveInfo(): String {
+        return reader.readLine()
+    }
     fun processInput() {
         while (true) {
             val input = reader.readLine() ?: break
@@ -200,10 +203,10 @@ class UCI(private val socket: Socket, hash: Double, nalimovPath: String, nalimov
                     endGame()
                 }
                 "position" -> {
-
+                    sendInfo()
                 }
                 "go" -> {
-                    
+                    retrieveInfo()
                 }
                 "stop" -> {
                     sendBestMove()
