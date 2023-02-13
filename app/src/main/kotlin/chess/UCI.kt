@@ -11,7 +11,8 @@ class UCI(private val socket: Socket, hash: Double, nalimovPath: String, nalimov
           depth: Int, seldepth: Array<Int>, time: Double, nodes: Int, pv: String,
           multipv: Array<String>, score: Array<Double>, currmove: String,
           currmovenumber: Int, hashfull: Double, nps: Int, tbhits: Double,
-          cpuload: Double, string: String, refutation: String, currline: Int, bestmove: String){
+          cpuload: Double, string: String, refutation: String, currline: Int, bestmove: String,
+          gameHasEnded: Boolean){
     var hash: Double = hash
         set(value) {
             field = value
@@ -128,6 +129,10 @@ class UCI(private val socket: Socket, hash: Double, nalimovPath: String, nalimov
         set(value) {
             field = value
         }
+    var gameHasEnded: Boolean = gameHasEnded
+        set(value) {
+            field = value
+        }
     private val reader = BufferedReader(InputStreamReader(socket.getInputStream()))
     private val writer = BufferedWriter(OutputStreamWriter(socket.getOutputStream()))
     private fun sendId() {
@@ -139,17 +144,14 @@ class UCI(private val socket: Socket, hash: Double, nalimovPath: String, nalimov
         writer.write("uciok\n")
         writer.flush()
     }
-
     private fun sendReadyOk() {
         writer.write("readyok\n")
         writer.flush()
     }
-
-    fun sendBestMove(move: String) {
-        writer.write("bestmove $move\n")
+    fun sendBestMove() {
+        writer.write("bestmove $bestmove\n")
         writer.flush()
     }
-
     fun sendCopyProtection() {
         writer.write("copyprotection chess\n")
         writer.flush()
@@ -177,10 +179,10 @@ class UCI(private val socket: Socket, hash: Double, nalimovPath: String, nalimov
         writer.write(UCI_Opponent + "\n")
         writer.flush()
     }
-    fun sendInfo(depth: Int, seldepth: Array<Int>, time: Double, nodes: Int, pv: String,
-             multipv: Array<String>, score: Array<Double>, currmove: String,
-             currmovenumber: Int, hashfull: Double, nps: Int, tbhits: Double,
-             cpuload: Double, string: String, refutation: String, currline: Int) {
+    fun endGame() {
+        gameHasEnded = true;
+    }
+    fun sendInfo() {
 
     }
     fun processInput() {
@@ -195,12 +197,16 @@ class UCI(private val socket: Socket, hash: Double, nalimovPath: String, nalimov
                 }
                 "isready" -> sendReadyOk()
                 "ucinewgame" -> {
+                    endGame()
                 }
                 "position" -> {
+
                 }
                 "go" -> {
+                    
                 }
                 "stop" -> {
+                    sendBestMove()
                 }
                 "ponderhit" -> {
                 }
