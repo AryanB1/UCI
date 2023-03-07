@@ -183,10 +183,29 @@ class UCI(private val socket: Socket, hash: Double, nalimovPath: String, nalimov
         gameHasEnded = true;
     }
     fun sendInfo() {
-
+        writer.write("$depth\n")
+        writer.write("$seldepth\n")
+        writer.write("$time\n")
+        writer.write("$nodes\n")
+        writer.write("$pv\n")
+        writer.write("$multipv\n")
+        writer.write("$score\n")
+        writer.write("$currmove\n")
+        writer.write("$currmovenumber\n")
+        writer.write("$hashfull\n")
+        writer.write("$nps\n")
+        writer.write("$tbhits\n")
+        writer.write("$cpuload\n")
+        writer.write("$string\n")
+        writer.write("$refutation\n")
+        writer.write("$currline\n")
+        writer.flush()
     }
     fun retrieveInfo(): String {
         return reader.readLine()
+    }
+    fun ponder(): String {
+        return bestmove;
     }
     fun processInput() {
         while (true) {
@@ -201,18 +220,14 @@ class UCI(private val socket: Socket, hash: Double, nalimovPath: String, nalimov
                 "isready" -> sendReadyOk()
                 "ucinewgame" -> {
                     endGame()
+                    sendId()
+                    sendOptions()
+                    sendUciOk()
                 }
-                "position" -> {
-                    sendInfo()
-                }
-                "go" -> {
-                    retrieveInfo()
-                }
-                "stop" -> {
-                    sendBestMove()
-                }
-                "ponderhit" -> {
-                }
+                "position" -> sendInfo()
+                "go" -> retrieveInfo()
+                "stop" -> sendBestMove()
+                "ponderhit" -> ponder();
                 "quit" -> break
                 else -> sendMessage("Unknown command")
             }
