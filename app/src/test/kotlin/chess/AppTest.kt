@@ -1,5 +1,5 @@
 package chess;
-
+import kotlin.test.Test;
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
